@@ -12,8 +12,9 @@ public class CodingTest {
     Coding coding = new Coding();
 
     @Test
-    public void testEncodeShortValueNormalLength() {//1
-        Assertions.assertEquals("00001100", coding.encodeShortValue(new StringBuilder("0-9dod")));
+    public void testEncodeShortValueNull() {//1
+        Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.encodeShortValue(null));
+        Assertions.assertNull(exception.getMessage());
     }
 
     @Test
@@ -22,7 +23,12 @@ public class CodingTest {
     }
 
     @Test
-    public void testEncodeShortValueLongLength() {//3
+    public void testEncodeShortValueNormalLength() {//3
+        Assertions.assertEquals("00001100", coding.encodeShortValue(new StringBuilder("0-9dod")));
+    }
+
+    @Test
+    public void testEncodeShortValueLongLength() {//4
         StringBuilder testValue = new StringBuilder();
         for (int i = 0; i<128; i++) {
             testValue.append("0");
@@ -32,35 +38,29 @@ public class CodingTest {
     }
 
     @Test
-    public void testEncodeShortValueNull() {//4
-        Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.encodeShortValue(null));
-        Assertions.assertNull(exception.getMessage());
-    }
-
-    @Test
     public void testEncodeLongValueNull() {//1
         Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.encodeLongValue(null));
         Assertions.assertNull(exception.getMessage());
     }
 
     @Test
-    public void testEncodeLongValueEmptyArray() {//2
-        Assertions.assertEquals("0000000100000000", coding.encodeLongValue(new ArrayList[0]));
+    public void testEncodeLongValueOneNullList() {//2
+        List<Character>[] arrayTestValue = new List[1];
+        Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.encodeLongValue(arrayTestValue));
+        Assertions.assertNull(exception.getMessage());
     }
 
     @Test
-    public void testEncodeLongValueOneEmptyList() {//3
+    public void testEncodeLongValueEmptyArray() {//3
+        Assertions.assertEquals("0000001100000000", coding.encodeLongValue(new ArrayList[0]));
+    }
+
+    @Test
+    public void testEncodeLongValueOneEmptyList() {//4
         List<Character> testValue = new LinkedList();
         List<Character>[] arrayTestValue = new List[1];
         arrayTestValue[0] = testValue;
         Assertions.assertEquals("0000001100000000", coding.encodeLongValue(arrayTestValue));
-    }
-
-    @Test
-    public void testEncodeLongValueOneNullList() {//4
-        List<Character>[] arrayTestValue = new List[1];
-        Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.encodeLongValue(arrayTestValue));
-        Assertions.assertNull(exception.getMessage());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class CodingTest {
 
 
     @Test
-    public void testEncodeLongValueTwoLists() {//6
+    public void testEncodeLongValueTwoNormaLists() {//6
         List<Character> firstPartOfTestValue = new LinkedList();
         List<Character> secondPartOfTestValue = new LinkedList();
         List<Character>[] arrayTestValue = new List[2];
@@ -114,16 +114,15 @@ public class CodingTest {
     }*/
 
 
-
     @Test
-    public void testDecodeShortValueNormalValue() {//1
-        Assertions.assertEquals(9, coding.decodeShortValue("00010010"));
+    public void testDecodeShortValueNull() {//1
+        Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.decodeShortValue(null));
+        Assertions.assertNull(exception.getMessage());
     }
 
     @Test
-    public void testDecodeShortValueNull() {//2
-        Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.decodeShortValue(null));
-        Assertions.assertNull(exception.getMessage());
+    public void testDecodeShortValueNormalValue() {//2
+        Assertions.assertEquals(9, coding.decodeShortValue("00010010"));
     }
 
     @Test
@@ -144,22 +143,22 @@ public class CodingTest {
         Assertions.assertEquals("For input string: \"xx01001\"", exception.getMessage());
     }
 
-
     @Test
-    public void testDecodeLongValueNormalValue() {//1
-        Assertions.assertEquals(82, coding.decodeLongValue("0000001101010010"));
-    }
-
-    @Test
-    public void testDecodeLongValueNull() {//2
+    public void testDecodeLongValueNull() {//1
         Exception exception = Assertions.assertThrows(NullPointerException.class, () -> coding.decodeLongValue(null));
         Assertions.assertNull(exception.getMessage());
     }
 
     @Test
-    public void testDecodeLongValueEmptyEncodedValue() {//3
+    public void testDecodeLongValueEmptyEncodedValue() {//2
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> coding.decodeLongValue(""));
         Assertions.assertEquals("encodedValue shouldn't be empty", exception.getMessage());
+    }
+
+
+    @Test
+    public void testDecodeLongValueNormalValue() {//3
+        Assertions.assertEquals(82, coding.decodeLongValue("0000001101010010"));
     }
 
     @Test

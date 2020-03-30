@@ -11,14 +11,14 @@ public class Coding {
            throw new IllegalArgumentException("length shouldn't exceed length of 127 symbols. Try to use long value format");
        }
        StringBuilder result = new StringBuilder(Integer.toBinaryString(value.length()));
-       addZerosToStrBuilder(result);
+       leadStrBuilderToAlmostOctetsFormat(result);
        return result.toString() + "0";
     }
 
     public String encodeLongValue(List<Character>[] values) {
         StringBuilder decimalLengthValueRepresentation = new StringBuilder();
         if (values.length == 0) {
-            return "0000000100000000";
+            return "0000001100000000";
         } else if (values.length == 1) {
             decimalLengthValueRepresentation.append(Integer.toString(values[0].size(), 2));
         } else {
@@ -38,17 +38,17 @@ public class Coding {
 
         int log2LengthValue = decimalLengthValueRepresentation.length();
         StringBuilder result = new StringBuilder(Integer.toBinaryString(log2LengthValue/8+(log2LengthValue%8 == 0 ? 0: 1)));
-        addZerosToStrBuilder(result);
+        leadStrBuilderToAlmostOctetsFormat(result);
         result.append("1");
-        addZerosToStrBuilder(decimalLengthValueRepresentation);
+        leadStrBuilderToAlmostOctetsFormat(decimalLengthValueRepresentation);
         decimalLengthValueRepresentation.insert(0, '0');
         result.append(decimalLengthValueRepresentation);
         return result.toString();
     }
 
-    private void addZerosToStrBuilder(StringBuilder inputString) {
-        while (inputString.length()%8 != 7) {
-            inputString.insert(0, "0");
+    private void leadStrBuilderToAlmostOctetsFormat(StringBuilder strBuilder) {
+        while (strBuilder.length()%8 != 7) {
+            strBuilder.insert(0, "0");
         }
     }
 
